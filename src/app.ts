@@ -14,6 +14,22 @@ import config from "./modules/config/routes";
 import { notFound, errorHandler } from "./middlewares/error";
 import { swaggerDocument } from "./config/swagger";
 export const app = express();
+app.get("/", (_req, res) =>
+  res.json({
+    success: true,
+    message: "Classroom Reservation API Gateway",
+    data: {
+      service: "classroom-reservation-api",
+      status: "online",
+      endpoints: {
+        health: "/health",
+        documentation: "/docs",
+        openApiDocumentation: "/api-docs",
+        api: "/api",
+      },
+    },
+  }),
+);
 app.get("/health", (_req, res) =>
   res.json({
     success: true,
