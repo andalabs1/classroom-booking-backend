@@ -427,8 +427,14 @@ const changeBookingStatus = async (
     );
   if (status === "IN_USE" && booking.status !== "CONFIRMED")
     throw new AppError(409, "Only confirmed bookings can be started");
-  if (status === "COMPLETED" && booking.status !== "IN_USE")
-    throw new AppError(409, "Only in-use bookings can be completed");
+  if (
+    status === "COMPLETED" &&
+    !["CONFIRMED", "IN_USE"].includes(booking.status)
+  )
+    throw new AppError(
+      409,
+      "Only confirmed or in-use bookings can be completed",
+    );
   if (
     status === "NO_SHOW" &&
     (booking.status !== "CONFIRMED" || booking.startAt > new Date())

@@ -52,4 +52,75 @@ describe("Authorization", () => {
       401,
     );
   });
+
+  it("allows an admin to complete a confirmed booking", async () => {
+    const admin = {
+      id: 10n,
+      role: "ADMIN",
+      email: "admin@test.local",
+      status: "ACTIVE",
+      tokenVersion: 0,
+    };
+    const booking = {
+      id: 201n,
+      userId: 20n,
+      bookingCode: "BK-CONFIRMED",
+      status: "CONFIRMED",
+      endAt: new Date(Date.now() + 60_000),
+    };
+    jest
+      .spyOn(prisma.user, "findUnique")
+      .mockResolvedValue(admin as never);
+    jest
+      .spyOn(prisma.booking, "findUnique")
+      .mockResolvedValue(booking as never);
+    jest.spyOn(prisma.booking, "update").mockResolvedValue({
+      ...booking,
+      status: "COMPLETED",
+      completedAt: new Date(),
+    } as never);
+    jest
+      .spyOn(prisma.notification, "create")
+      .mockResolvedValue({ id: 301n } as never);
+    jest
+      .spyOn(prisma.auditLog, "create")
+      .mockResolvedValue({ id: 401n } as never);
+    jest
+      .spyOn(prisma, "$transaction")
+      .mockImplementation((async (
+        callback: (client: typeof prisma) => unknown,
+      ) => callback(prisma)) as never);
+    const adminToken = jwt.sign({ id: "10" }, env.JWT_SECRET);
+
+    const response = await request(app)
+      .patch("/api/admin/bookings/201/complete")
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.status).toBe("COMPLETED");
+  });
+
+  it("rejects completing a pending booking", async () => {
+    jest.spyOn(prisma.user, "findUnique").mockResolvedValue({
+      id: 10n,
+      role: "ADMIN",
+      email: "admin@test.local",
+      status: "ACTIVE",
+      tokenVersion: 0,
+    } as never);
+    jest.spyOn(prisma.booking, "findUnique").mockResolvedValue({
+      id: 202n,
+      userId: 20n,
+      bookingCode: "BK-PENDING",
+      status: "PENDING",
+      endAt: new Date(Date.now() + 60_000),
+    } as never);
+    const adminToken = jwt.sign({ id: "10" }, env.JWT_SECRET);
+
+    const response = await request(app)
+      .patch("/api/admin/bookings/202/complete")
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(response.status).toBe(409);
+  });
 });
