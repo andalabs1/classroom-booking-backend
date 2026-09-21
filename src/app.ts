@@ -45,3 +45,6 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(notFound);
 app.use(errorHandler);
+
+// Vercel loads this file as the serverless Express entry point.
+export default app;
