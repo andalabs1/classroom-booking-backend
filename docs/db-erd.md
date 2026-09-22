@@ -1,88 +1,114 @@
 # Database Entity Relationship Diagram
 
-```mermaid
-erDiagram
-    USER ||--o{ BOOKING : creates
-    USER ||--o{ BOOKING : approves
-    USER ||--o{ NOTIFICATION : receives
-    USER ||--o{ AUDIT_LOG : performs
-    CLASSROOM ||--o{ BOOKING : contains
+แผนภาพนี้อ้างอิงจาก `prisma/schema.prisma` และ migration ปัจจุบันของฐานข้อมูล MySQL
 
-    USER {
-        BIGINT id PK
-        VARCHAR name
-        VARCHAR email UK
-        VARCHAR passwordHash
-        ENUM role
-        ENUM status
-        DATETIME createdAt
-        DATETIME updatedAt
+ไฟล์สำหรับแก้ไขใน diagrams.net: [`db-erd.drawio`](./db-erd.drawio)
+
+```mermaid
+classDiagram
+    direction LR
+
+    class USER {
+        id : type [PK]
+        userCode : VARCHAR [UK, nullable, max 50]
+        name : VARCHAR [max 150]
+        firstName : VARCHAR [nullable, max 100]
+        lastName : VARCHAR [nullable, max 100]
+        phone : VARCHAR [nullable, max 20]
+        email : VARCHAR [UK, max 255]
+        passwordHash : VARCHAR [max 255]
+        role : ENUM USER-STUDENT-TEACHER-ADMIN
+        status : ENUM ACTIVE-INACTIVE-SUSPENDED
+        tokenVersion : INT [default 0]
+        createdAt : DATETIME
+        updatedAt : DATETIME
     }
-    CLASSROOM {
-        BIGINT id PK
-        VARCHAR name
-        VARCHAR building
-        VARCHAR floor
-        INT capacity
-        JSON equipment
-        VARCHAR imageUrl
-        ENUM status
-        DATETIME createdAt
-        DATETIME updatedAt
+
+    class CLASSROOM {
+        id : type [PK]
+        code : VARCHAR [UK, nullable, max 50]
+        name : VARCHAR [max 100]
+        building : VARCHAR [max 100]
+        floor : VARCHAR [max 50]
+        capacity : INT
+        description : TEXT [nullable]
+        category : VARCHAR [nullable, max 100]
+        equipment : JSON [nullable]
+        imageUrl : VARCHAR [nullable, max 500]
+        status : ENUM ACTIVE-INACTIVE-MAINTENANCE
+        createdAt : DATETIME
+        updatedAt : DATETIME
     }
-    BOOKING {
-        BIGINT id PK
-        VARCHAR bookingCode UK
-        BIGINT userId FK
-        BIGINT classroomId FK
-        VARCHAR purpose
-        INT attendeeCount
-        JSON requestedEquipment
-        TEXT description
-        DATETIME startAt
-        DATETIME endAt
-        ENUM status
-        TEXT adminNote
-        BIGINT approvedBy FK
-        DATETIME approvedAt
-        DATETIME checkedInAt
-        DATETIME completedAt
-        DATETIME cancelledAt
-        TEXT cancelReason
-        DATETIME createdAt
-        DATETIME updatedAt
+
+    class BOOKING {
+        id : type [PK]
+        bookingCode : VARCHAR [UK, max 30]
+        userId : type [FK]
+        classroomId : type [FK]
+        purpose : VARCHAR [max 255]
+        attendeeCount : INT [default 1]
+        requestedEquipment : JSON [nullable]
+        description : TEXT [nullable]
+        startAt : DATETIME
+        endAt : DATETIME
+        status : ENUM PENDING-CONFIRMED-IN_USE-REJECTED-CANCELLED-COMPLETED-NO_SHOW
+        adminNote : TEXT [nullable]
+        approvedBy : type [FK, nullable]
+        approvedAt : DATETIME [nullable]
+        checkedInAt : DATETIME [nullable]
+        completedAt : DATETIME [nullable]
+        cancelledAt : DATETIME [nullable]
+        cancelReason : TEXT [nullable]
+        createdAt : DATETIME
+        updatedAt : DATETIME
     }
-    AUDIT_LOG {
-        BIGINT id PK
-        BIGINT userId FK
-        VARCHAR action
-        VARCHAR entity
-        BIGINT entityId
-        JSON oldValue
-        JSON newValue
-        DATETIME createdAt
+
+    class NOTIFICATION {
+        id : type [PK]
+        userId : type [FK]
+        bookingId : type [FK, nullable]
+        title : VARCHAR
+        message : TEXT
+        type : VARCHAR
+        dedupeKey : VARCHAR [UK, nullable, max 191]
+        isRead : BOOLEAN [default false]
+        readAt : DATETIME [nullable]
+        createdAt : DATETIME
     }
-    NOTIFICATION {
-        BIGINT id PK
-        BIGINT userId FK
-        BIGINT bookingId FK
-        VARCHAR title
-        TEXT message
-        VARCHAR type
-        VARCHAR dedupeKey UK
-        BOOLEAN isRead
-        DATETIME createdAt
+
+    class AUDIT_LOG {
+        id : type [PK]
+        userId : type [FK, nullable]
+        action : VARCHAR
+        entity : VARCHAR
+        entityId : type [nullable, logical reference]
+        oldValue : JSON [nullable]
+        newValue : JSON [nullable]
+        createdAt : DATETIME
     }
+
+    USER "1" --> "0..*" BOOKING : creates
+    USER "0..1" --> "0..*" BOOKING : approves
+    CLASSROOM "1" --> "0..*" BOOKING : is reserved by
+    USER "1" --> "0..*" NOTIFICATION : receives
+    BOOKING "0..1" --> "0..*" NOTIFICATION : generates
+    USER "0..1" --> "0..*" AUDIT_LOG : performs
 ```
 
-## ความสัมพันธ์สำคัญ
+## Foreign keys
 
-- User หนึ่งคนสร้าง Booking ได้หลายรายการ
-- Admin เป็น User เช่นกัน และสามารถอนุมัติ Booking ได้
-- Classroom หนึ่งห้องมี Booking ได้หลายรายการ
-- User หนึ่งคนได้รับ Notification ได้หลายรายการ
-- User หนึ่งคนสร้าง Audit Log ได้หลายรายการ
+- `Booking.userId` → `User.id` (`ON DELETE RESTRICT`)
+- `Booking.classroomId` → `Classroom.id` (`ON DELETE RESTRICT`)
+- `Booking.approvedBy` → `User.id` (`ON DELETE SET NULL`)
+- `Notification.userId` → `User.id` (`ON DELETE CASCADE`)
+- `Notification.bookingId` → `Booking.id` (`ON DELETE SET NULL`)
+- `AuditLog.userId` → `User.id` (`ON DELETE SET NULL`)
 
-Role: `USER`, `STUDENT`, `TEACHER`, `ADMIN`
+`AuditLog.entityId` เป็น polymorphic/logical reference ที่ใช้ร่วมกับ `entity` จึงไม่ได้ประกาศเป็น foreign key โดยตรง
 
-Booking Status: `PENDING`, `CONFIRMED`, `IN_USE`, `COMPLETED`, `REJECTED`, `CANCELLED`, `NO_SHOW`
+## Main indexes
+
+- `Booking`: `userId`, `classroomId`, `status`, `startAt`, `endAt`
+- `Booking`: composite index (`classroomId`, `startAt`, `endAt`, `status`)
+- `Notification`: `userId`, `bookingId`, `isRead`
+- `AuditLog`: `userId`

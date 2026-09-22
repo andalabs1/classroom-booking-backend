@@ -1069,7 +1069,7 @@ export const swaggerDocument = {
     "/api/admin/uploads/images/{key}": {
       delete: {
         tags: ["Uploads"],
-        summary: "ลบรูป local",
+        summary: "ลบรูปที่อัปโหลด (local/R2)",
         security: bearer,
         parameters: [
           {

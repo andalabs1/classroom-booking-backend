@@ -1,0 +1,235 @@
+<mxfile host="65bd71144e">
+    <diagram id="classroom-booking-erd" name="ER Diagram">
+        <mxGraphModel dx="1676" dy="1233" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0" adaptiveColors="simple">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="user" value="USER" style="shape=table;startSize=32;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;fillColor=#b1ddf0;strokeColor=#10739e;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="99" width="350" height="344" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_id" value="id : type [PK]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="user" vertex="1">
+                    <mxGeometry y="32" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_userCode" value="userCode : VARCHAR(50) [UK, nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="56" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_name" value="name : VARCHAR(150)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="80" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_firstName" value="firstName : VARCHAR(100) [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="104" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_lastName" value="lastName : VARCHAR(100) [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="128" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_phone" value="phone : VARCHAR(20) [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="152" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_email" value="email : VARCHAR(255) [UK]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="176" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_passwordHash" value="passwordHash : VARCHAR(255)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="200" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_role" value="role : ENUM(USER, STUDENT, TEACHER, ADMIN)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="224" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_status" value="status : ENUM(ACTIVE, INACTIVE, SUSPENDED)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="248" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_tokenVersion" value="tokenVersion : INT [default 0]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="272" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_createdAt" value="createdAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="296" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_updatedAt" value="updatedAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="user" vertex="1">
+                    <mxGeometry y="320" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom" value="CLASSROOM" style="shape=table;startSize=32;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;fillColor=#b1ddf0;strokeColor=#10739e;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="559" width="350" height="344" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_id" value="id : type [PK]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="classroom" vertex="1">
+                    <mxGeometry y="32" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_code" value="code : VARCHAR(50) [UK, nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="56" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_name" value="name : VARCHAR(100)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="80" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_building" value="building : VARCHAR(100)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="104" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_floor" value="floor : VARCHAR(50)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="128" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_capacity" value="capacity : INT" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="152" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_description" value="description : TEXT [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="176" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_category" value="category : VARCHAR(100) [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="200" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_equipment" value="equipment : JSON [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="224" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_imageUrl" value="imageUrl : VARCHAR(500) [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="248" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_status" value="status : ENUM(ACTIVE, INACTIVE, MAINTENANCE)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="272" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_createdAt" value="createdAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="296" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="classroom_updatedAt" value="updatedAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="classroom" vertex="1">
+                    <mxGeometry y="320" width="350" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking" value="BOOKING" style="shape=table;startSize=32;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;fillColor=#b1ddf0;strokeColor=#10739e;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="589" width="460" height="512" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_id" value="id : type [PK]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="booking" vertex="1">
+                    <mxGeometry y="32" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_bookingCode" value="bookingCode : VARCHAR(30) [UK]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="56" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_userId" value="userId : type [FK → USER.id]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="booking" vertex="1">
+                    <mxGeometry y="80" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_classroomId" value="classroomId : type [FK → CLASSROOM.id]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="booking" vertex="1">
+                    <mxGeometry y="104" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_purpose" value="purpose : VARCHAR(255)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="128" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_attendeeCount" value="attendeeCount : INT [default 1]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="152" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_requestedEquipment" value="requestedEquipment : JSON [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="176" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_description" value="description : TEXT [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="200" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_startAt" value="startAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="224" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_endAt" value="endAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="248" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_status" value="status : BookingStatus [default PENDING]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="272" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_adminNote" value="adminNote : TEXT [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="296" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_approvedBy" value="approvedBy : type [FK → USER.id, nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="booking" vertex="1">
+                    <mxGeometry y="320" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_approvedAt" value="approvedAt : DATETIME [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="344" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_checkedInAt" value="checkedInAt : DATETIME [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="368" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_completedAt" value="completedAt : DATETIME [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="392" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_cancelledAt" value="cancelledAt : DATETIME [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="416" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_cancelReason" value="cancelReason : TEXT [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="440" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_createdAt" value="createdAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="464" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="booking_updatedAt" value="updatedAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="booking" vertex="1">
+                    <mxGeometry y="488" width="460" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification" value="NOTIFICATION" style="shape=table;startSize=32;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;fillColor=#b0e3e6;strokeColor=#0e8088;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="119" width="420" height="272" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_id" value="id : type [PK]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="notification" vertex="1">
+                    <mxGeometry y="32" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_userId" value="userId : type [FK → USER.id]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="notification" vertex="1">
+                    <mxGeometry y="56" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_bookingId" value="bookingId : type [FK → BOOKING.id, nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="notification" vertex="1">
+                    <mxGeometry y="80" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_title" value="title : VARCHAR" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="notification" vertex="1">
+                    <mxGeometry y="104" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_message" value="message : TEXT" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="notification" vertex="1">
+                    <mxGeometry y="128" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_type" value="type : VARCHAR" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="notification" vertex="1">
+                    <mxGeometry y="152" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_dedupeKey" value="dedupeKey : VARCHAR(191) [UK, nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="notification" vertex="1">
+                    <mxGeometry y="176" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_isRead" value="isRead : BOOLEAN [default false]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="notification" vertex="1">
+                    <mxGeometry y="200" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_readAt" value="readAt : DATETIME [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="notification" vertex="1">
+                    <mxGeometry y="224" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="notification_createdAt" value="createdAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="notification" vertex="1">
+                    <mxGeometry y="248" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit" value="AUDIT_LOG" style="shape=table;startSize=32;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;fillColor=#b1ddf0;strokeColor=#10739e;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="559" width="420" height="224" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_id" value="id : type [PK]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="audit" vertex="1">
+                    <mxGeometry y="32" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_userId" value="userId : type [FK → USER.id, nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="audit" vertex="1">
+                    <mxGeometry y="56" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_action" value="action : VARCHAR" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="audit" vertex="1">
+                    <mxGeometry y="80" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_entity" value="entity : VARCHAR" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="audit" vertex="1">
+                    <mxGeometry y="104" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_entityId" value="entityId : type [logical reference, nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="audit" vertex="1">
+                    <mxGeometry y="128" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_oldValue" value="oldValue : JSON [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="audit" vertex="1">
+                    <mxGeometry y="152" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_newValue" value="newValue : JSON [nullable]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="audit" vertex="1">
+                    <mxGeometry y="176" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit_createdAt" value="createdAt : DATETIME" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;" parent="audit" vertex="1">
+                    <mxGeometry y="200" width="420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk_booking_user" value="userId" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERone;endFill=0;" parent="1" source="booking_userId" target="user_id" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk_booking_classroom" value="classroomId" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERone;endFill=0;" parent="1" source="booking_classroomId" target="classroom_id" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk_booking_approver" value="approvedBy" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERzeroToOne;endFill=0;" parent="1" source="booking_approvedBy" target="user_id" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk_notification_user" value="userId" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERone;endFill=0;" parent="1" source="notification_userId" target="user_id" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk_notification_booking" value="bookingId" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERzeroToOne;endFill=0;" parent="1" source="notification_bookingId" target="booking_id" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk_audit_user" value="userId" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERzeroToOne;endFill=0;" parent="1" source="audit_userId" target="user_id" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
