@@ -1,4 +1,3 @@
-import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
@@ -37,27 +36,6 @@ function assertSafeKey(key: string) {
   }
 }
 
-export class LocalImageStorage implements ImageStorage {
-  private readonly directory = path.resolve(process.cwd(), 'public', 'assets');
-
-  async save(file: Express.Multer.File) {
-    const extension = resolveExtension(file.mimetype);
-    await mkdir(this.directory, { recursive: true });
-    const key = randomUUID() + extension;
-    await writeFile(path.join(this.directory, key), file.buffer);
-    return { key, url: env.PUBLIC_BASE_URL.replace(/\/$/, '') + '/assets/' + key };
-  }
-
-  async remove(key: string) {
-    assertSafeKey(key);
-    try {
-      await unlink(path.join(this.directory, path.basename(key)));
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
-    }
-  }
-}
-
 function resolveR2Endpoint(): string {
   if (env.R2_ENDPOINT) return env.R2_ENDPOINT.replace(/\/$/, '');
   if (!env.R2_ACCOUNT_ID) {
@@ -66,15 +44,14 @@ function resolveR2Endpoint(): string {
   return `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
 }
 
+// Single storage backend: Cloudflare R2 (Vercel has an ephemeral filesystem,
+// so local-disk storage cannot work in production).
 export class R2ImageStorage implements ImageStorage {
   private readonly client: S3Client;
   private readonly bucket = env.R2_BUCKET;
   private readonly publicBaseUrl = env.R2_PUBLIC_BASE_URL.replace(/\/$/, '');
 
   constructor() {
-    if (!env.R2_ACCESS_KEY_ID || !env.R2_SECRET_ACCESS_KEY) {
-      throw new AppError(500, 'R2 storage is not configured (missing R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY)');
-    }
     this.client = new S3Client({
       region: 'auto',
       endpoint: resolveR2Endpoint(),
@@ -107,9 +84,4 @@ export class R2ImageStorage implements ImageStorage {
   }
 }
 
-function createImageStorage(): ImageStorage {
-  if (env.STORAGE_DRIVER === 'r2') return new R2ImageStorage();
-  return new LocalImageStorage();
-}
-
-export const imageStorage: ImageStorage = createImageStorage();
+export const imageStorage: ImageStorage = new R2ImageStorage();

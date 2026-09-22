@@ -40,10 +40,6 @@ app.get("/health", (_req, res) =>
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use(
-  "/assets",
-  express.static("public/assets", { maxAge: "1d", immutable: false }),
-);
 app.use((req, _res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
