@@ -7,8 +7,8 @@ import { authenticate } from "../../middlewares/auth";
 import { AppError } from "../../middlewares/error";
 import { created, ok } from "../../utils/response";
 import {
-  createNotification,
   notifyBookingCancelled,
+  notifyBookingCheckedIn,
   notifyBookingCreated,
   notifyBookingUpdated,
 } from "../../services/notification.service";
@@ -547,13 +547,9 @@ router.post("/:id/check-in", async (req, res, next) => {
         newValue: jsonSafe(updated) as Prisma.InputJsonValue,
       },
     });
-    await createNotification({
-      userId: booking.userId,
-      bookingId: booking.id,
-      title: "เริ่มใช้งานห้อง",
-      message: `Booking ${booking.bookingCode} check-in สำเร็จ`,
-      type: "BOOKING_IN_USE",
-    }).catch((error) => console.error("Booking notification failed", error));
+    await notifyBookingCheckedIn(updated).catch((error) =>
+      console.error("Booking notification failed", error),
+    );
     ok(res, jsonSafe(updated), "Booking checked in");
   } catch (error) {
     next(error);

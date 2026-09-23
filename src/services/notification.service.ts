@@ -89,3 +89,25 @@ export async function notifyBookingCancelled(booking: {
     }),
   ]);
 }
+
+export async function notifyBookingCheckedIn(booking: {
+  id: bigint;
+  userId: bigint;
+  bookingCode: string;
+}) {
+  await Promise.all([
+    createNotification({
+      userId: booking.userId,
+      bookingId: booking.id,
+      title: "เริ่มใช้งานห้อง",
+      message: "Booking " + booking.bookingCode + " check-in สำเร็จ",
+      type: "BOOKING_IN_USE",
+    }),
+    notifyActiveAdmins({
+      bookingId: booking.id,
+      title: "ผู้ใช้ check-in แล้ว",
+      message: "Booking " + booking.bookingCode + " เริ่มใช้งานห้องแล้ว",
+      type: "BOOKING_IN_USE",
+    }),
+  ]);
+}

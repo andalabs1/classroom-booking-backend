@@ -272,11 +272,26 @@ describe("Booking API", () => {
       status: "IN_USE",
       checkedInAt: new Date(),
     } as never);
+    jest.spyOn(prisma.user, "findMany").mockResolvedValue([{ id: 20n }] as never);
     const response = await request(app)
       .post("/api/bookings/202/check-in")
       .set("Authorization", "Bearer " + token())
       .send();
     expect(response.status).toBe(200);
     expect(response.body.data.status).toBe("IN_USE");
+    expect(prisma.notification.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        userId: 10n,
+        bookingId: 202n,
+        type: "BOOKING_IN_USE",
+      }),
+    });
+    expect(prisma.notification.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        userId: 20n,
+        bookingId: 202n,
+        type: "BOOKING_IN_USE",
+      }),
+    });
   });
 });
