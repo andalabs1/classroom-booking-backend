@@ -18,7 +18,7 @@ const schema = z.object({
   BOOKING_CANCEL_MINUTES: z.coerce.number().int().nonnegative().default(120),
   BOOKING_MAX_DURATION_HOURS: z.coerce.number().positive().default(8),
   BOOKING_MAX_ADVANCE_DAYS: z.coerce.number().int().positive().default(90),
-  BOOKING_OPEN_TIME: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).default("08:00"),
+  BOOKING_OPEN_TIME: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).default("06:00"),
   BOOKING_CLOSE_TIME: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).default("20:00"),
   BOOKING_CHECKIN_EARLY_MINUTES: z.coerce
     .number()

@@ -1,0 +1,13 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { spawn, execFileSync } = require('node:child_process');
+require('dotenv').config({ quiet: true });
+const root = path.resolve('sql_backup');
+const latest = fs.readdirSync(root).sort().reverse().find(name => fs.existsSync(path.join(root, name, 'manifest.json')));
+if (!latest) throw new Error('Run db:export:local with a MySQL Prisma client first.');
+process.env.DATABASE_URL = 'file:' + path.join(root, latest, 'local.db').replaceAll('\\', '/');
+execFileSync(process.execPath, ['node_modules/prisma/build/index.js', 'generate', '--schema', 'prisma/schema.sqlite.prisma'], { stdio: 'inherit' });
+console.log(`Local SQLite: ${path.join(root, latest, 'local.db')}`);
+const child = spawn(process.execPath, ['node_modules/tsx/dist/cli.mjs', 'src/server.ts'], { stdio: 'inherit', env: process.env });
+child.on('exit', code => { process.exitCode = code ?? 1; });
+for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));

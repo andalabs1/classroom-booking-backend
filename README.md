@@ -2,6 +2,8 @@
 
 Node.js + TypeScript + Express + MySQL + Prisma REST API สำหรับระบบจองห้องเรียน
 
+คู่มือรัน local, export ฐานข้อมูล และ restore SQLite/MySQL: [docs.md](docs.md)
+
 ## เริ่มใช้งานด้วย SQLite (Local)
 
 SQLite ใช้ workflow แยกสำหรับ local โดยไม่กระทบ schema MySQL:
@@ -14,6 +16,27 @@ SQLite ใช้ workflow แยกสำหรับ local โดยไม่�
 6. ใช้ `npm run dev`
 
 ฐานข้อมูลจะถูกสร้างที่ `prisma/dev.db`
+
+### สำรองข้อมูล MySQL มาใช้ในเครื่อง
+
+เมื่อตั้ง `.env` ให้ชี้ MySQL ต้นทางแล้ว ให้รัน:
+
+```powershell
+npm run prisma:generate
+npm run db:export:local
+npm run dev:sqlite
+```
+
+แต่ละ snapshot อยู่ใน `sql_backup/<UTC timestamp>/` และมี `local.db`,
+`sqlite.sql`, `mysql.sql` และ `manifest.json` พร้อมจำนวนแถวและผลตรวจสอบ
+สคริปต์อ่านข้อมูล MySQL ภายใน transaction และตรวจ integrity, foreign keys
+รวมทั้ง restore SQLite SQL แล้วเทียบข้อมูลทุกแถวก่อนยืนยันสำเร็จ
+`mysql.sql` ใช้ import เข้า MySQL database ว่างในเครื่อง; `sqlite.sql` ใช้กับ SQLite
+ทั้งสองไฟล์มี schema และข้อมูล ส่วน `dev:sqlite` เลือก snapshot ล่าสุดที่สำเร็จ
+และรัน backend โดยไม่แก้ `.env` โดย worker ของ backend อาจปรับสถานะข้อมูลใน `local.db`
+หลังเปิดใช้งาน ส่วนไฟล์ SQL ยังคงเป็น snapshot ตอน export
+โฟลเดอร์ backup ไม่ถูกเก็บใน Git เพราะมีข้อมูลผู้ใช้และ password hashes
+หากจะ export MySQL ใหม่หลังใช้ SQLite ให้รัน `npm run prisma:generate` ก่อนเสมอ
 
 ## เริ่มใช้งานด้วย MySQL
 
@@ -321,7 +344,7 @@ Storage abstraction อยู่ที่ src/services/image-storage.ts เม�
     BOOKING_CANCEL_MINUTES=120
     BOOKING_MAX_DURATION_HOURS=8
     BOOKING_MAX_ADVANCE_DAYS=90
-    BOOKING_OPEN_TIME=08:00
+    BOOKING_OPEN_TIME=06:00
     BOOKING_CLOSE_TIME=20:00
     BOOKING_CHECKIN_EARLY_MINUTES=30
     BOOKING_CHECKIN_LATE_MINUTES=30

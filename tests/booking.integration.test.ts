@@ -145,11 +145,11 @@ describe("Booking API", () => {
       .set("Authorization", "Bearer " + token())
       .send({
         ...payload,
-        startAt: `${day}T07:00:00+07:00`,
-        endAt: `${day}T08:00:00+07:00`,
+        startAt: `${day}T05:00:00+07:00`,
+        endAt: `${day}T06:00:00+07:00`,
       });
     expect(response.status).toBe(400);
-    expect(response.body.message).toContain("08:00");
+    expect(response.body.message).toContain("06:00");
   });
   it("returns 400 when requested equipment is unavailable", async () => {
     jest.spyOn(prisma.classroom, "findUnique").mockResolvedValue({
