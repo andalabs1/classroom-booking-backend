@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { BookingStatus, PrismaClient } from "@prisma/client";
-import { env } from "../src/config/env";
+import { env } from "../src/shared/config/env";
 
 const prisma = new PrismaClient();
 
