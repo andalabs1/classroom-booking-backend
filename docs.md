@@ -4,6 +4,10 @@ Backend ใช้ Node.js, TypeScript, Express และ Prisma รองรั�
 เอกสารนี้เน้นการนำข้อมูล MySQL มาใช้งานในเครื่อง พร้อม SQL สำหรับ restore
 คำสั่งทั้งหมดให้รันจาก root ของโปรเจกต์ใน PowerShell
 
+`npm run dev` จะสร้าง Prisma client ให้ตรงกับ `DATABASE_URL` ก่อนเปิด server
+โดยเลือก MySQL schema เมื่อ URL เริ่มด้วย `mysql://` และ SQLite schema เมื่อเริ่มด้วย `file:`
+หากต้องการใช้ snapshot ที่ export ไว้ ให้ใช้ `npm run dev:sqlite`
+
 ## 1. สิ่งที่ต้องเตรียม
 
 - Node.js และ npm (งาน export นี้ใช้ Node.js 22)

@@ -4,6 +4,9 @@ Node.js + TypeScript + Express + MySQL + Prisma REST API สำหรับร�
 
 คู่มือรัน local, export ฐานข้อมูล และ restore SQLite/MySQL: [docs.md](docs.md)
 
+`npm run dev` สร้าง Prisma client ให้ตรงกับ `DATABASE_URL` (`mysql://` หรือ `file:`)
+ก่อนเปิด server อัตโนมัติ ส่วน `npm run dev:sqlite` ใช้ SQLite snapshot ล่าสุดที่ export สำเร็จ
+
 ## เริ่มใช้งานด้วย SQLite (Local)
 
 SQLite ใช้ workflow แยกสำหรับ local โดยไม่กระทบ schema MySQL:

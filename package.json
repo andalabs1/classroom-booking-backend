@@ -5,6 +5,7 @@
   "scripts": {
     "db:export:local": "node scripts/export-local.cjs",
     "dev:sqlite": "node scripts/start-local.cjs",
+    "predev": "node scripts/prepare-dev.cjs",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
