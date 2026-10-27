@@ -154,7 +154,14 @@ r.delete("/classrooms/:id", async (req, res, next) => {
       );
     }
     const imageKey = managedImageKey(oldValue.imageUrl);
-    if (imageKey) await imageStorage.remove(imageKey);
+    if (imageKey) {
+      try {
+        await imageStorage.remove(imageKey);
+      } catch (error) {
+        // ไม่ให้ R2 ชั่วคราวขัดขวางการลบข้อมูลห้อง; log เพื่อให้ตาม cleanup ได้
+        console.warn(`Failed to delete classroom image ${imageKey} from R2`, error);
+      }
+    }
     await prisma.classroom.delete({ where: { id } });
     await audit(req.user!.id, "DELETE", "CLASSROOM", id, oldValue);
     ok(res, jsonSafe(oldValue), "Classroom deleted");
