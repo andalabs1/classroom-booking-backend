@@ -11,6 +11,7 @@ import { created, ok } from "../../shared/utils/response";
 
 import { pageQuery, classroomInput, safeUser } from "./admin.schemas";
 import { audit } from "./admin-audit.service";
+import { imageStorage, managedImageKey } from "../uploads/image-storage.service";
 
 const r = Router();
 
@@ -139,25 +140,24 @@ r.patch("/classrooms/:id/status", async (req, res, next) => {
     next(error);
   }
 });
-// ปิดห้องเป็น INACTIVE แบบ soft delete เพื่อเก็บประวัติที่อ้างถึงห้อง พร้อมบันทึก audit
+// ลบห้องจริงเมื่อยังไม่มีประวัติการจอง เพื่อไม่ทำลายข้อมูล booking ที่อ้างถึงห้อง
 r.delete("/classrooms/:id", async (req, res, next) => {
   try {
     const id = BigInt(req.params.id);
     const oldValue = await prisma.classroom.findUnique({ where: { id } });
     if (!oldValue) throw new AppError(404, "Classroom not found");
-    const classroom = await prisma.classroom.update({
-      where: { id },
-      data: { status: "INACTIVE" },
-    });
-    await audit(
-      req.user!.id,
-      "SOFT_DELETE",
-      "CLASSROOM",
-      id,
-      oldValue,
-      classroom,
-    );
-    ok(res, jsonSafe(classroom), "Classroom deactivated");
+    const bookingCount = await prisma.booking.count({ where: { classroomId: id } });
+    if (bookingCount > 0) {
+      throw new AppError(
+        409,
+        "Cannot delete classroom with existing bookings; deactivate it instead",
+      );
+    }
+    const imageKey = managedImageKey(oldValue.imageUrl);
+    if (imageKey) await imageStorage.remove(imageKey);
+    await prisma.classroom.delete({ where: { id } });
+    await audit(req.user!.id, "DELETE", "CLASSROOM", id, oldValue);
+    ok(res, jsonSafe(oldValue), "Classroom deleted");
   } catch (error) {
     next(error);
   }

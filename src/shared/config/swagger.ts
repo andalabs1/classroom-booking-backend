@@ -708,7 +708,7 @@ export const swaggerDocument = {
       },
       delete: {
         tags: ["Admin"],
-        summary: "ปิดใช้งานห้อง",
+        summary: "ลบห้อง",
         security: bearer,
         parameters: [id],
         responses: success(),

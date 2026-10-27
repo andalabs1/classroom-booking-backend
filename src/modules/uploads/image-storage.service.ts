@@ -58,6 +58,25 @@ function assertSafeKey(key: string) {
 }
 
 /**
+ * คืน key เฉพาะ URL ที่ชี้มายัง public base URL ของ R2 ที่ระบบนี้ดูแลอยู่
+ * URL ภายนอกและ placeholder จะคืน null เพื่อไม่ลบไฟล์ของผู้อื่นโดยไม่ตั้งใจ
+ */
+export function managedImageKey(imageUrl: string | null | undefined) {
+  if (!imageUrl) return null;
+  try {
+    const image = new URL(imageUrl);
+    const base = new URL(env.R2_PUBLIC_BASE_URL);
+    if (image.origin !== base.origin) return null;
+    const key = decodeURIComponent(image.pathname.replace(/^\//, ""));
+    if (!key || key.includes("/")) return null;
+    assertSafeKey(key);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * เลือก R2_ENDPOINT ที่ตั้งไว้ก่อน หรือประกอบ endpoint จาก R2_ACCOUNT_ID
  * ตัด slash ท้าย URL และโยน AppError 500 หากไม่สามารถระบุ endpoint ได้
  */
