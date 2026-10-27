@@ -49,12 +49,11 @@ tests/
 prisma/                             # schema, migration และ seed
 scripts/                            # เตรียม client, export/restore และรัน SQLite
 public/                             # asset เดิม
-frontend/                           # frontend เดิมที่อยู่ใน repo backend
 vitest.config.mts                    # runner configuration
 tsconfig.test.json                  # ตรวจ type ของ src/tests/config โดยไม่ emit
 ```
 
-`frontend/` เป็นแอปเดิมแยกจาก `src/` ของ API ชุดทดสอบ backend เลือกเฉพาะ `tests/**/*.test.ts` ส่วน TypeScript build เลือกเฉพาะ `src/**/*.ts`
+Frontend พัฒนาใน repository แยกจาก backend ชุดทดสอบ backend เลือกเฉพาะ `tests/**/*.test.ts` ส่วน TypeScript build เลือกเฉพาะ `src/**/*.ts`
 
 ## กติกาวางไฟล์ใหม่
 

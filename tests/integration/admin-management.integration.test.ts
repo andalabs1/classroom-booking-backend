@@ -68,25 +68,55 @@ describe("Admin management routes", () => {
     expect(response.status).toBe(400);
     expect(prisma.classroom.create).not.toHaveBeenCalled();
   });
-  it("soft-deletes a classroom", async () => {
+  it("deletes a classroom with no booking history", async () => {
+    const classroom = { id: 20n, status: "ACTIVE", imageUrl: null };
+    vi.spyOn(prisma.classroom, "findUnique").mockResolvedValue(
+      classroom as never,
+    );
+    vi.spyOn(prisma.booking, "count").mockResolvedValue(0);
+    vi.spyOn(prisma.classroom, "delete").mockResolvedValue(classroom as never);
+    vi.spyOn(prisma.auditLog, "create").mockResolvedValue({ id: 30n } as never);
+
+    const response = await request(app)
+      .delete("/api/admin/classrooms/20")
+      .set("Authorization", auth);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Classroom deleted");
+    expect(prisma.booking.count).toHaveBeenCalledWith({
+      where: { classroomId: 20n },
+    });
+    expect(prisma.classroom.delete).toHaveBeenCalledWith({
+      where: { id: 20n },
+    });
+    expect(prisma.classroom.update).not.toHaveBeenCalled();
+    expect(prisma.auditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        action: "DELETE",
+        entity: "CLASSROOM",
+        entityId: 20n,
+        oldValue: { id: "20", status: "ACTIVE", imageUrl: null },
+      }),
+    });
+  });
+  it("rejects deleting a classroom with booking history", async () => {
     vi.spyOn(prisma.classroom, "findUnique").mockResolvedValue({
       id: 20n,
       status: "ACTIVE",
     } as never);
-    vi.spyOn(prisma.classroom, "update").mockResolvedValue({
-      id: 20n,
-      status: "INACTIVE",
-    } as never);
-    vi.spyOn(prisma.auditLog, "create").mockResolvedValue({ id: 30n } as never);
+    vi.spyOn(prisma.booking, "count").mockResolvedValue(1);
+
     const response = await request(app)
       .delete("/api/admin/classrooms/20")
       .set("Authorization", auth);
-    expect(response.status).toBe(200);
-    expect(prisma.classroom.update).toHaveBeenCalledWith({
-      where: { id: 20n },
-      data: { status: "INACTIVE" },
-    });
+
+    expect(response.status).toBe(409);
+    expect(response.body.message).toBe(
+      "Cannot delete classroom with existing bookings; deactivate it instead",
+    );
     expect(prisma.classroom.delete).not.toHaveBeenCalled();
+    expect(prisma.classroom.update).not.toHaveBeenCalled();
+    expect(prisma.auditLog.create).not.toHaveBeenCalled();
   });
   it("returns 404 for a missing classroom", async () => {
     vi.spyOn(prisma.classroom, "findUnique").mockResolvedValue(null);
