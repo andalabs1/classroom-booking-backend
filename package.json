@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "db:export:local": "node scripts/export-local.cjs",
+    "db:export:postgres": "node scripts/export-postgres.cjs",
     "dev:sqlite": "node scripts/start-local.cjs",
     "predev": "node scripts/prepare-dev.cjs",
     "dev": "tsx watch src/server.ts",
