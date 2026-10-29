@@ -1,0 +1,11 @@
+{
+  "tables": {
+    "User": 11,
+    "Classroom": 5,
+    "Booking": 2,
+    "AuditLog": 145,
+    "Notification": 62
+  },
+  "integrity": "ok",
+  "sql_restore": "ok"
+}
