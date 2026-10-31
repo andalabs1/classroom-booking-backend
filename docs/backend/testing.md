@@ -1,6 +1,6 @@
 # ทดสอบ Backend ด้วย Vitest
 
-[กลับหน้าคู่มือ](./overview.md) · [โครงสร้างโฟลเดอร์](./structure.md)
+[กลับหน้าคู่มือ](./overview.md) · [โครงสร้างโฟลเดอร์](./structure.md) · [ทะเบียนฟังก์ชัน](./functions.md) · [พัฒนาต่อ](./development.md)
 
 ## เตรียมเครื่องและคำสั่ง
 
@@ -94,3 +94,20 @@ it("returns the owner's unread count", async () => {
 ชุดนี้ตรวจการประกอบ Express, middleware, validation, business rules และ service ด้วย dependency ที่จำลองไว้ ยังไม่ยืนยัน SQL, migration, transaction rollback, การจองพร้อมกันข้าม process หรือการเชื่อมต่อ R2 จริง หากเปลี่ยน schema/transaction/storage ต้องเพิ่มการตรวจใน environment แยกที่ออกแบบสำหรับงานนั้น
 
 ถ้ารันใน sandbox ที่ห้ามเปิด local listener ให้ใช้สิทธิ์ที่อนุญาต listener สำหรับ Supertest ก่อน ไม่ควรแก้ API assertion เพียงเพื่อข้ามข้อจำกัดของ sandbox
+
+## Test helpers ที่ใช้ร่วมกัน
+
+| Source                                             | Functions                         | ใช้เมื่อไร                                                                                                     |
+| -------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [helpers/auth.ts](../../tests/helpers/auth.ts)     | activeUser, token, authenticateAs | สร้างข้อมูลผู้ใช้ JWT และ Bearer header; user.findUnique ในเทสต์ถูก stub ด้วย fixture เดียวจนกว่าจะกำหนดผลใหม่ |
+| ไฟล์เดียวกัน                                       | mockTransaction                   | ทำให้ callback ของ $transaction ทำงานกับ mock client เพื่อทดสอบ handler; ไม่จำลอง rollback/isolation           |
+| [helpers/prisma.ts](../../tests/helpers/prisma.ts) | fail, stub, resetPrismaMock       | ลงทะเบียน query ที่ต้อง stub และคืน default fail ก่อนแต่ละเทสต์                                                |
+| [setup.ts](../../tests/setup.ts)                   | setup hooks และ vi.mock           | override env ก่อน import app, ล้าง spies/timers และตรวจ unstubbed database/storage calls                       |
+
+รายละเอียด input/output อยู่ใน [functions.md](./functions.md) ส่วน endpoint และเงื่อนไขที่ต้องรักษาดู [api.md](./api.md)
+
+## เมื่อ assertion ล้าสมัยกว่าพฤติกรรม backend
+
+ตรวจ handler ปัจจุบันก่อนปรับ expectation ตัวอย่าง DELETE ห้องตอนนี้ตรวจ booking.count และลบ record จริงเฉพาะห้องที่ไม่มี booking ขณะที่การปิดใช้งานใช้ PATCH status INACTIVE หาก branch ที่รันยังมีเคสชื่อ `soft-deletes a classroom` ให้เทียบ assertions กับสัญญาใหม่และ mock query ที่เพิ่มให้ครบ โดยไม่เปลี่ยน source เพียงเพื่อให้ expectation เก่าผ่าน
+
+การตรวจเอกสารอย่างเดียวใช้การเทียบทะเบียนฟังก์ชัน/route/dependency กับ source และตรวจลิงก์ Markdown โดยไม่จำเป็นต้องเปิด database หรือรัน seed

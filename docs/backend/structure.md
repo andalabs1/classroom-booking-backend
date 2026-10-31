@@ -1,8 +1,8 @@
 # โครงสร้าง Backend
 
-[กลับหน้าคู่มือ](./overview.md) · [คู่มือทดสอบ](./testing.md)
+[กลับหน้าคู่มือ](./overview.md) · [Tech stack](./tech-stack.md) · [Functions](./functions.md) · [Services](./services.md) · [คู่มือทดสอบ](./testing.md)
 
-## โฟลเดอร์ปัจจุบัน
+## โฟลเดอร์ที่เกี่ยวข้องกับ Backend
 
 ```text
 src/
@@ -85,4 +85,4 @@ Frontend พัฒนาใน repository แยกจาก backend ชุด�
 
 เมื่อสลับจาก build เก่าที่มีโฟลเดอร์ `dist/config`, `dist/services` หรือ `dist/utils` ให้รัน `npm run build` ซึ่งล้าง `dist/` ก่อน compile เพื่อไม่ให้ไฟล์ที่ย้ายแล้วค้างอยู่
 
-การย้ายโฟลเดอร์นี้ไม่เปลี่ยน API URL, Prisma schema หรือ migration
+ดูขั้นตอนเตรียม database, generate Prisma client และการรันในแต่ละ environment ที่ [development.md](./development.md) กับสัญญา API ปัจจุบันที่ [api.md](./api.md)
